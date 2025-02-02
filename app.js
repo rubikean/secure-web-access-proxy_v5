@@ -25,7 +25,10 @@ app.use(session({
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: parseInt(process.env.SESSION_TIMEOUT) }
+    cookie: {
+        maxAge: 15 * 60 * 1000, // 15 minutes in milliseconds
+    },
+    rolling: true // Reset maxAge on every response
 }));
 
 // Middleware to check authentication
