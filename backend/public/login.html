@@ -1,0 +1,20 @@
+<!-- backend/public/login.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - Secure Web Access Proxy</title>
+</head>
+<body>
+  <h1>Login</h1>
+  <form method="POST" action="/auth/login">
+    <label for="username">Username:</label>
+    <input type="text" name="username" required /><br/>
+    <label for="password">Password:</label>
+    <input type="password" name="password" required /><br/>
+    <!-- For 2FA token if enabled -->
+    <label for="token">2FA Token:</label>
+    <input type="text" name="token" /><br/>
+    <button type="submit">Login</button>
+  </form>
+</body>
+</html>

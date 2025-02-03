@@ -1,0 +1,83 @@
+<!-- backend/public/admin.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel - Secure Web Access Proxy</title>
+</head>
+<body>
+  <h1>Admin Panel</h1>
+  
+  <h2>Add New User</h2>
+  <form id="add-user-form">
+    <label for="username">Username:</label>
+    <input type="text" name="username" required /><br/>
+    <label for="password">Password:</label>
+    <input type="password" name="password" required /><br/>
+    <label for="role">Role:</label>
+    <select name="role">
+      <option value="community">Community</option>
+      <option value="focusadmin">Admin</option>
+    </select><br/>
+    <button type="submit">Add User</button>
+  </form>
+
+  <h2>Assign Blade</h2>
+  <form id="assign-blade-form">
+    <label for="userId">User ID:</label>
+    <input type="number" name="userId" required /><br/>
+    <label for="bladeIp">Blade IP:</label>
+    <input type="text" name="bladeIp" required /><br/>
+    <button type="submit">Assign Blade</button>
+  </form>
+
+  <h2>Activity Logs</h2>
+  <div id="logs"></div>
+
+  <script>
+    // Add User
+    document.getElementById('add-user-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      fetch('/admin/add-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: formData.get('username'),
+          password: formData.get('password'),
+          role: formData.get('role')
+        })
+      })
+      .then(response => response.json())
+      .then(data => alert(data.message));
+    });
+
+    // Assign Blade
+    document.getElementById('assign-blade-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      fetch('/admin/assign-blade', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: formData.get('userId'),
+          bladeIp: formData.get('bladeIp')
+        })
+      })
+      .then(response => response.json())
+      .then(data => alert(data.message));
+    });
+
+    // Fetch Logs
+    fetch('/admin/logs')
+      .then(response => response.json())
+      .then(data => {
+        const logsDiv = document.getElementById('logs');
+        data.logs.forEach(log => {
+          const p = document.createElement('p');
+          p.innerText = `[${log.created_at}] User ${log.user_id} performed ${log.action}: ${log.description}`;
+          logsDiv.appendChild(p);
+        });
+      });
+  </script>
+</body>
+</html>

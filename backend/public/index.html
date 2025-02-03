@@ -1,0 +1,26 @@
+<!-- backend/public/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Secure Blade Access</title>
+</head>
+<body>
+  <h1>Welcome</h1>
+  <div id="blade-container"></div>
+  <script>
+    // Fetch blade assignments and dynamically create iframes
+    fetch('/blade')
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('blade-container');
+        data.blades.forEach(blade => {
+          const iframe = document.createElement('iframe');
+          iframe.src = `http://${blade.blade_ip}`;  // Adjust to https if available
+          iframe.width = "800";
+          iframe.height = "600";
+          container.appendChild(iframe);
+        });
+      });
+  </script>
+</body>
+</html>
